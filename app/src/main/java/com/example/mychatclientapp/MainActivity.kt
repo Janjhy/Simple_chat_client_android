@@ -2,7 +2,9 @@ package com.example.mychatclientapp
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.view.View
+import android.widget.EditText
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,8 +22,9 @@ class MainActivity : AppCompatActivity() {
 
     //Function executes when the send button is pressed.
     fun sendMessage(view: View) {
-
+        val editText = findViewById<EditText>(R.id.editText)
+        val message = editText.text.toString()
+        RecyclerViewFragment().addMessage(message)
+        
     }
-
-
 }
