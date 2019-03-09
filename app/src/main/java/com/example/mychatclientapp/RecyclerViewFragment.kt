@@ -1,4 +1,4 @@
-package com.example.mychatclientapp
+/* package com.example.mychatclientapp
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -59,4 +59,4 @@ class RecyclerViewFragment : Fragment() {
         Log.d("addMessage", "---after---")
     }
 
-}
+} */

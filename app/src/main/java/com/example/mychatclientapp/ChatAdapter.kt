@@ -1,6 +1,5 @@
 package com.example.mychatclientapp
 
-import android.support.v7.widget.AppCompatAutoCompleteTextView
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,15 +9,15 @@ import android.widget.TextView
 
 class ChatAdapter(private val chatData: ArrayList<String>) : RecyclerView.Adapter<ChatAdapter.MyViewHolder>() {
 
-    class MyViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val textView: TextView = v.findViewById(R.id.textView)
+    class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val textView: TextView = view.findViewById(R.id.textView)
     }
 
     //Creates views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatAdapter.MyViewHolder {
         Log.d("chatAdapter", "onCreate")
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.my_text_view, parent, false)
-        return MyViewHolder(v)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.chat_text_view, parent, false)
+        return MyViewHolder(view)
     }
 
     //Replace contents of view

@@ -9,7 +9,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/textView" android:text="@string/chat_text"
-            android:background="@android:drawable/list_selector_background"
+            android:background="@drawable/chat_text_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
