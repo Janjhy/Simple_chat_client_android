@@ -14,10 +14,12 @@ import java.io.PrintStream
 import java.io.PrintWriter
 import java.net.InetAddress
 import java.net.Socket
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var out: PrintStream
+    private lateinit var incoming: Scanner
     //private lateinit var out1: PrintWriter
     private lateinit var socket: Socket
     private var chatData: ArrayList<String> = arrayListOf()
@@ -28,8 +30,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         viewManager = LinearLayoutManager(this)
         theAdapter = ChatAdapter(chatData)
+
         Thread(ChatThread()).start()
 
 
@@ -48,11 +52,16 @@ class MainActivity : AppCompatActivity() {
         }*/
     }
 
+    override fun onStart() {
+        super.onStart()
+        Thread(UpdateChatThread()).start()
+    }
+
     //Function executes when the send button is pressed.
     fun sendMessage(view: View) {
         val editText = findViewById<EditText>(R.id.editText)
         val message = editText.text.toString()
-        chatData.add(message)
+        //chatData.add(message)
 
         /*var outThread = Thread(Runnable() {
              fun run() {
@@ -66,9 +75,15 @@ class MainActivity : AppCompatActivity() {
         })*/
         var outMessage = Thread(OutThread(message))
         outMessage.start()
-        theAdapter.notifyDataSetChanged()
+        //theAdapter.notifyDataSetChanged()
         // RecyclerViewFragment().addMessage(message)
 
+    }
+
+    inner class AddMessage(): Runnable {
+        override fun run() {
+            theAdapter.notifyDataSetChanged()
+        }
     }
 
     inner class OutThread(message: String): Runnable {
@@ -79,13 +94,12 @@ class MainActivity : AppCompatActivity() {
                 Log.d("outThread", "run")
                 out.println(this.message)
             } catch (e: Exception) {
-                println("Exception: ${e.message}")
+                println("Exception: ${e.message} 1")
             }
         }
     }
 
     inner class ChatThread() : Runnable {
-
         override fun run(){
             try {
                 var address: InetAddress = InetAddress.getByName("10.0.2.2")
@@ -93,10 +107,30 @@ class MainActivity : AppCompatActivity() {
                 //out1 = PrintWriter(BufferedWriter(OutputStreamWriter(socket.getOutputStream())), true)
                 out = PrintStream(socket.getOutputStream(), true)
             } catch (e: Exception) {
-                println("Exception: ${e.message}")
+                println("Exception: ${e.message} 2")
             }
         }
+    }
 
+    inner class UpdateChatThread(): Runnable {
+        override fun run() {
+            Log.d("update chat", "access")
+            incoming = Scanner(socket.getInputStream())
+            while(true) {
+                try {
+                    chatData.add(incoming.nextLine())
+                    runOnUiThread(AddMessage())
+
+
+                    //theAdapter.notifyDataSetChanged()
+                    Log.d("update chat", "new incoming message")
+
+                } catch (e: Exception) {
+                    println("Exception: ${e.message} 3")
+                }
+            }
+
+        }
     }
 
     /*
